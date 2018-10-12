@@ -1,16 +1,25 @@
 const Koa = require('koa');
 const json = require('koa-json');
-
+const path = require('path');
 const Router = require('koa-router');
-
+const render = require('koa-ejs');
 const app = new Koa();
 const router = new Router();
 
 // Json prettier middleware
 app.use(json());
 
-//default root
-// app.use(async ctx => ctx.body = { msg: 'Hello from Koa' });
+render(app, {
+  root: path.join(__dirname, 'views'),
+  layout: 'template',
+  viewExt: 'html',
+  cache: false,
+  debug: false
+});
+
+app.use( async ctx => {
+  await ctx.render('index');
+})
 
 router.get('/koa', (ctx, next) => ctx.body = { msg: 'Hello from Koa!' });
 
