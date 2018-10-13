@@ -17,8 +17,12 @@ render(app, {
   debug: false
 });
 
-app.use( async ctx => {
+router.get('/', async ctx => {
   await ctx.render('index');
+})
+
+router.get('/contact', async ctx => {
+  await ctx.render('contact');
 })
 
 router.get('/koa', (ctx, next) => ctx.body = { msg: 'Hello from Koa!' });
