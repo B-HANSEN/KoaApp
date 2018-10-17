@@ -9,6 +9,9 @@ const router = new Router();
 // Json prettier middleware
 app.use(json());
 
+
+const names = ['Vito', 'Joe', 'Henry', 'Eddie', 'Leo'];
+
 render(app, {
   root: path.join(__dirname, 'views'),
   layout: 'template',
@@ -18,7 +21,7 @@ render(app, {
 });
 
 router.get('/', async ctx => {
-  await ctx.render('index', { title: 'My index page ;)'});
+  await ctx.render('index', { title: 'My index page ;)', names });
 })
 
 router.get('/contact', async ctx => {
