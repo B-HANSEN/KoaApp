@@ -20,15 +20,21 @@ render(app, {
   debug: false
 });
 
-router.get('/', async ctx => {
+router.get('/', index);
+router.get('/contact', showContact);
+router.get('/koa', showKoa);
+
+async function index(ctx){
   await ctx.render('index', { title: 'My index page ;)', names });
-})
+}
 
-router.get('/contact', async ctx => {
+async function showContact(ctx){
   await ctx.render('contact');
-})
+}
 
-router.get('/koa', (ctx, next) => ctx.body = { msg: 'Hello from Koa!' });
+async function showKoa(ctx){
+  ctx.body = { msg: 'Hello from Koa!' }
+}
 
 app
   .use(router.routes())
