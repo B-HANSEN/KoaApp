@@ -38,7 +38,8 @@ async function showContact(ctx){
 
 async function addContact(ctx){
   const { name } = ctx.request.body;
-  await ctx.render('contact', { name });
+  names.push(name);
+  ctx.redirect('/');
 }
 
 async function showKoa(ctx){
