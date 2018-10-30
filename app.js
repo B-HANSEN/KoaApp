@@ -5,10 +5,13 @@ const Router = require('koa-router');
 const render = require('koa-ejs');
 const app = new Koa();
 const router = new Router();
+const bodyParser = require('koa-bodyparser');
 
 // Json prettier middleware
 app.use(json());
 
+// Bodyparser
+app.use(bodyParser());
 
 const names = ['Vito', 'Joe', 'Henry', 'Eddie', 'Leo'];
 
@@ -22,6 +25,7 @@ render(app, {
 
 router.get('/', index);
 router.get('/contact', showContact);
+router.post('/addContact', addContact);
 router.get('/koa', showKoa);
 
 async function index(ctx){
@@ -30,6 +34,11 @@ async function index(ctx){
 
 async function showContact(ctx){
   await ctx.render('contact');
+}
+
+async function addContact(ctx){
+  const { name } = ctx.request.body;
+  await ctx.render('contact', { name });
 }
 
 async function showKoa(ctx){
