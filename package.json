@@ -16,5 +16,7 @@
     "koa-json": "^2.0.2",
     "koa-router": "^7.4.0"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "nodemon": "^1.18.10"
+  }
 }
