@@ -1,9 +1,6 @@
 <h1 class="title"><%- title %></h1>
-<div class="block">
-  <ul>
-    <% names.forEach(name => { %>
-      <li><%= name %></li>
-    <% })%>
-  </ul>
-  
-</div>
+<ul class="list-group">
+  <% things.forEach(thing => { %>
+  <li class="list-group-item"><%= thing %></li>
+  <% })%>
+</ul>

@@ -1,53 +1,62 @@
 const Koa = require('koa');
 const json = require('koa-json');
 const path = require('path');
-const Router = require('koa-router');
+const KoaRouter = require('koa-router');
 const render = require('koa-ejs');
-const app = new Koa();
-const router = new Router();
 const bodyParser = require('koa-bodyparser');
+
+const app = new Koa();
+const router = new KoaRouter();
 
 // Json prettier middleware
 app.use(json());
 
-// Bodyparser
+// Bodyparser middleware
 app.use(bodyParser());
 
-const names = ['Vito', 'Joe', 'Henry', 'Eddie', 'Leo'];
+// add additional properties to context; could be used in context of authentication etc.
+app.context.user = 'Mike';
 
+// replace with database
+const things = ['Kite surfing', 'Programming', 'Cycling', 'Swimming'];
+
+// setup to work with templates
 render(app, {
-  root: path.join(__dirname, 'views'),
-  layout: 'template',
-  viewExt: 'html',
-  cache: false,
-  debug: false
+	root: path.join(__dirname, 'views'), // folder for template engine to look for template
+	layout: 'layout', // wrap all views inserted here
+	viewExt: 'html',
+	cache: false,
+	debug: false,
 });
 
+// routes
 router.get('/', index);
-router.get('/contact', showContact);
-router.post('/addContact', addContact);
+router.get('/test', ctx => (ctx.body = `Hello ${ctx.user}`));
+// example how to use parameters:
+router.get('/test2/:name', ctx => (ctx.body = `Hello ${ctx.params.name}`));
+router.get('/add', showAdd);
+router.post('/add', add);
 router.get('/koa', showKoa);
 
-async function index(ctx){
-  await ctx.render('index', { title: 'My index page ;)', names });
+// list of things
+async function index(ctx) {
+	await ctx.render('index', { title: 'Things I like', things });
 }
 
-async function showContact(ctx){
-  await ctx.render('contact');
+async function showAdd(ctx) {
+	await ctx.render('add');
 }
 
-async function addContact(ctx){
-  const { name } = ctx.request.body;
-  names.push(name);
-  ctx.redirect('/');
+// add a thing
+async function add(ctx) {
+	const body = ctx.request.body;
+	things.push(body.thing);
+	ctx.redirect('/');
+}
+async function showKoa(ctx) {
+	ctx.body = { msg: 'Hello from Koa!' };
 }
 
-async function showKoa(ctx){
-  ctx.body = { msg: 'Hello from Koa!' }
-}
+app.use(router.routes()).use(router.allowedMethods());
 
-app
-  .use(router.routes())
-  .use(router.allowedMethods());
-
-app.listen(3000, () => console.log('Server Started!'))
+app.listen(3000, () => console.log('Server Started!'));
